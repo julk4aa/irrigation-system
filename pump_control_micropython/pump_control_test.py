@@ -1,9 +1,9 @@
 from machine import * 
-from DIYables_MicroPython_Ultrasonic_Sensor import UltrasonicSensor
+#from DIYables_MicroPython_Ultrasonic_Sensor import UltrasonicSensor
 import time
 
 pump = Pin(23, Pin.OUT, value = 0)
-sensor = UltrasonicSensor(trig.pin = 16, echo.pin = 17)
+#sensor = UltrasonicSensor(trig_pin = 16, echo_pin = 17)
 led = Pin(2, Pin.OUT, value = 0)
 button = Pin(33, Pin.IN, Pin.PULL_UP)
 
@@ -11,6 +11,11 @@ def pump_on():
     print("pump in on")
     pump.value(1)
     time.sleep(5)
+
+def pump_off():
+    print("pump -off")
+    pump.value(0);
+    time.sleep(5);
 
 def esp_config():
     led.value(1);
@@ -24,17 +29,19 @@ def button_detect():
         time.sleep(1);
 
 def sensor_config():
-    sensor = set_detection_threshold(40)
-    sensor.enable_filter(num_samples=20)
+    pass
+ #   sensor = set_detection_threshold(40)
+  #  sensor.enable_filter(num_samples=20)
 
 
 def sensor_update():
-    sensor.loop()
-    dist = sensor.get_distance()
+    #sensor.loop()
+    #dist = sensor.get_distance()
+    dist = 0
     if dist < 5:
         #turn on all 4 diodes
         print("full tank")
-    else if dist < 12:
+    elif dist < 12:
         #trun on 3 diodes
         print("medium water level")
     else:
@@ -44,9 +51,11 @@ def sensor_update():
 esp_config()
 sensor_config()
 
-while true:
-    button_detect()
-    sensor_update()
+for i in range(1, 6):
+    pump_on()
+    pump_off()
+    #button_detect()
+    #sensor_update()
 
     
             
